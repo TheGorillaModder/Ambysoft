@@ -1,0 +1,13 @@
+<img onclick="changeGame('Snake')" alt="Snake" src="Images/Snake.io.jpg" style="width: 150px; height: 150px; margin: 5px;">
+<img onclick="changeGame('ShortLife')" alt="Short Life" src="Images/ShortLife.jpg" style="width: 150px; height: 150px; margin: 5px;">
+<img onclick="changeGame('DrunkMan3D')" alt="Drunk Man 3D" src="Images/DrunkMan3D.jpg" style="width: 150px; height: 150px; margin: 5px;">
+<img onclick="changeGame('GetACoolGun')" alt="Get A Cool Gun" src="Images/GetACoolGun.jpg" style="width: 150px; height: 150px; margin: 5px;">
+<img onclick="changeGame('GunRush')" alt="Gun Rush" src="Images/GunRush.jpg" style="width: 150px; height: 150px; margin: 5px;">
+<img onclick="changeGame('SquidGameButBlockworld')" alt="Squid Game But Blockworld" src="Images/SquidGameButBlockworld.jpg" style="width: 150px; height: 150px; margin: 5px;">
+<img onclick="changeGame('ColorRaceObby')" alt="Color Race Obby" src="Images/ColorRaceObby.jpg" style="width: 150px; height: 150px; margin: 5px;">
+<img onclick="changeGame('Qube2048')" alt="Qube 2048" src="Images/Qube2048.jpg" style="width: 150px; height: 150px; margin: 5px;">
+<img onclick="changeGame('GeometryStars')" alt="Geometry Stars" src="Images/GeometryStars.jpg" style="width: 150px; height: 150px; margin: 5px;">
+<img onclick="changeGame('NumberDomination')" alt="Number Domination" src="Images/NumberDomination.jpg" style="width: 150px; height: 150px; margin: 5px;">
+<img onclick="changeGame('EvolutionOfTrust')" alt="Evolution Of Trust" src="Images/EvolutionOfTrust.jpg" style="width: 150px; height: 150px; margin: 5px;">
+<img onclick="changeGame('RunSausageRun')" alt="Run Sausage Run" src="Images/RunSausageRun.jpg" style="width: 150px; height: 150px; margin: 5px;">
+<img onclick="changeGame('DrawBridges')" alt="Draw Bridges" src="Images/DrawBridges.jpg" style="width: 150px; height: 150px; margin: 5px;">
