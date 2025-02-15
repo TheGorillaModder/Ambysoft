@@ -1,4 +1,4 @@
-<img onclick="changeGame('Snake')" alt="Snake" src="https://raw.githubusercontent.com/TheGorillaModder/Ambysoft/refs/heads/main/Snake.io.jpg" style="width: 150px; height: 150px; margin: 5px;">
+<img onclick="changeGame('Snake')" alt="Snake" src="Snake.io.jpg" style="width: 150px; height: 150px; margin: 5px;">
 <img onclick="changeGame('ShortLife')" alt="Short Life" src="https://raw.githubusercontent.com/TheGorillaModder/Ambysoft/refs/heads/main/ShortLife.jpg" style="width: 150px; height: 150px; margin: 5px;">
 <img onclick="changeGame('DrunkMan3D')" alt="Drunk Man 3D" src="https://raw.githubusercontent.com/TheGorillaModder/Ambysoft/refs/heads/main/DrunkMan3D.jpg" style="width: 150px; height: 150px; margin: 5px;">
 <img onclick="changeGame('GetACoolGun')" alt="Get A Cool Gun" src="https://raw.githubusercontent.com/TheGorillaModder/Ambysoft/refs/heads/main/GetACoolGun.jpg" style="width: 150px; height: 150px; margin: 5px;">
