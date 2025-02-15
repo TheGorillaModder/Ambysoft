@@ -1,13 +1,13 @@
 <img onclick="changeGame('Snake')" alt="Snake" src="Snake.io.jpg" style="width: 150px; height: 150px; margin: 5px;">
-<img onclick="changeGame('ShortLife')" alt="Short Life" src="https://raw.githubusercontent.com/TheGorillaModder/Ambysoft/refs/heads/main/ShortLife.jpg" style="width: 150px; height: 150px; margin: 5px;">
-<img onclick="changeGame('DrunkMan3D')" alt="Drunk Man 3D" src="https://raw.githubusercontent.com/TheGorillaModder/Ambysoft/refs/heads/main/DrunkMan3D.jpg" style="width: 150px; height: 150px; margin: 5px;">
-<img onclick="changeGame('GetACoolGun')" alt="Get A Cool Gun" src="https://raw.githubusercontent.com/TheGorillaModder/Ambysoft/refs/heads/main/GetACoolGun.jpg" style="width: 150px; height: 150px; margin: 5px;">
-<img onclick="changeGame('GunRush')" alt="Gun Rush" src="https://raw.githubusercontent.com/TheGorillaModder/Ambysoft/refs/heads/main/GunRush.jpg" style="width: 150px; height: 150px; margin: 5px;">
-<img onclick="changeGame('SquidGameButBlockworld')" alt="Squid Game But Blockworld" src="https://raw.githubusercontent.com/TheGorillaModder/Ambysoft/refs/heads/main/SquidGameButBlockworld.jpg" style="width: 150px; height: 150px; margin: 5px;">
-<img onclick="changeGame('ColorRaceObby')" alt="Color Race Obby" src="https://raw.githubusercontent.com/TheGorillaModder/Ambysoft/refs/heads/main/ColorRaceObby.jpg" style="width: 150px; height: 150px; margin: 5px;">
-<img onclick="changeGame('Qube2048')" alt="Qube 2048" src="https://raw.githubusercontent.com/TheGorillaModder/Ambysoft/refs/heads/main/Qube2048.jpg" style="width: 150px; height: 150px; margin: 5px;">
-<img onclick="changeGame('GeometryStars')" alt="Geometry Stars" src="https://raw.githubusercontent.com/TheGorillaModder/Ambysoft/refs/heads/main/GeometryStars.jpg" style="width: 150px; height: 150px; margin: 5px;">
-<img onclick="changeGame('NumberDomination')" alt="Number Domination" src="https://raw.githubusercontent.com/TheGorillaModder/Ambysoft/refs/heads/main/NumberDomination.jpg" style="width: 150px; height: 150px; margin: 5px;">
-<img onclick="changeGame('EvolutionOfTrust')" alt="Evolution Of Trust" src="https://raw.githubusercontent.com/TheGorillaModder/Ambysoft/refs/heads/main/EvolutionOfTrust.jpg" style="width: 150px; height: 150px; margin: 5px;">
-<img onclick="changeGame('RunSausageRun')" alt="Run Sausage Run" src="https://raw.githubusercontent.com/TheGorillaModder/Ambysoft/refs/heads/main/RunSausageRun.jpg" style="width: 150px; height: 150px; margin: 5px;">
-<img onclick="changeGame('DrawBridges')" alt="Draw Bridges" src="https://raw.githubusercontent.com/TheGorillaModder/Ambysoft/refs/heads/main/DrawBridges.jpg" style="width: 150px; height: 150px; margin: 5px;">
+<img onclick="changeGame('ShortLife')" alt="Short Life" src="ShortLife.jpg" style="width: 150px; height: 150px; margin: 5px;">
+<img onclick="changeGame('DrunkMan3D')" alt="Drunk Man 3D" src="DrunkMan3D.jpg" style="width: 150px; height: 150px; margin: 5px;">
+<img onclick="changeGame('GetACoolGun')" alt="Get A Cool Gun" src="GetACoolGun.jpg" style="width: 150px; height: 150px; margin: 5px;">
+<img onclick="changeGame('GunRush')" alt="Gun Rush" src="GunRush.jpg" style="width: 150px; height: 150px; margin: 5px;">
+<img onclick="changeGame('SquidGameButBlockworld')" alt="Squid Game But Blockworld" src="SquidGameButBlockworld.jpg" style="width: 150px; height: 150px; margin: 5px;">
+<img onclick="changeGame('ColorRaceObby')" alt="Color Race Obby" src="ColorRaceObby.jpg" style="width: 150px; height: 150px; margin: 5px;">
+<img onclick="changeGame('Qube2048')" alt="Qube 2048" src="Qube2048.jpg" style="width: 150px; height: 150px; margin: 5px;">
+<img onclick="changeGame('GeometryStars')" alt="Geometry Stars" src="GeometryStars.jpg" style="width: 150px; height: 150px; margin: 5px;">
+<img onclick="changeGame('NumberDomination')" alt="Number Domination" src="NumberDomination.jpg" style="width: 150px; height: 150px; margin: 5px;">
+<img onclick="changeGame('EvolutionOfTrust')" alt="Evolution Of Trust" src="EvolutionOfTrust.jpg" style="width: 150px; height: 150px; margin: 5px;">
+<img onclick="changeGame('RunSausageRun')" alt="Run Sausage Run" src="RunSausageRun.jpg" style="width: 150px; height: 150px; margin: 5px;">
+<img onclick="changeGame('DrawBridges')" alt="Draw Bridges" src="DrawBridges.jpg" style="width: 150px; height: 150px; margin: 5px;">
