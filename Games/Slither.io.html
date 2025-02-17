@@ -16,37 +16,56 @@
             background: rgba(255, 255, 255, 0.2);
             border: 2px solid white;
         }
+        #leaderboard {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 200px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 10px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
     <canvas id="gameCanvas"></canvas>
     <canvas id="minimap"></canvas>
+    <div id="leaderboard">Leaderboard</div>
+    
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
         const minimap = document.getElementById("minimap");
         const minimapCtx = minimap.getContext("2d");
+        const leaderboardDiv = document.getElementById("leaderboard");
+
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
         const worldSize = 5000;
+        let zoom = 2;
 
         function randomColor() {
             return `hsl(${Math.random() * 360}, 100%, 50%)`;
         }
 
-        function createPlayer(x, y) {
+        function createPlayer(name, x, y) {
             return {
+                name,
                 snake: Array.from({ length: 10 }, (_, i) => ({ x: x - i * 10, y })),
                 angle: Math.random() * Math.PI * 2,
                 speed: 2,
-                color: randomColor()
+                color: randomColor(),
+                foodEaten: 0
             };
         }
 
-        let players = [createPlayer(worldSize / 2, worldSize / 2)];
-        let aiPlayers = Array.from({ length: 5 }, () => createPlayer(Math.random() * worldSize, Math.random() * worldSize));
+        let players = [createPlayer("Player", worldSize / 2, worldSize / 2)];
+        let aiPlayers = Array.from({ length: 15 }, (_, i) => createPlayer("AI " + (i + 1), Math.random() * worldSize, Math.random() * worldSize));
         let food = [];
+
         function spawnFood() {
             while (food.length < 100) {
                 food.push({ x: Math.random() * worldSize, y: Math.random() * worldSize });
@@ -65,11 +84,14 @@
                 x: player.snake[0].x + Math.cos(player.angle) * player.speed, 
                 y: player.snake[0].y + Math.sin(player.angle) * player.speed 
             };
+
             if (head.x < 0 || head.x > worldSize || head.y < 0 || head.y > worldSize) return;
             player.snake.unshift(head);
+
             for (let i = 0; i < food.length; i++) {
                 if (Math.hypot(head.x - food[i].x, head.y - food[i].y) < 10) {
                     food.splice(i, 1);
+                    player.foodEaten++;
                     spawnFood();
                     return;
                 }
@@ -79,15 +101,17 @@
 
         function updateAI() {
             aiPlayers.forEach(ai => {
-                // Find the closest food
-                let closestFood = food.reduce((closest, current) => {
-                    let distanceToCurrent = Math.hypot(ai.snake[0].x - current.x, ai.snake[0].y - current.y);
-                    let distanceToClosest = Math.hypot(ai.snake[0].x - closest.x, ai.snake[0].y - closest.y);
-                    return distanceToCurrent < distanceToClosest ? current : closest;
-                });
+                let closestFood = food.reduce((closest, f) => {
+                    let d1 = Math.hypot(ai.snake[0].x - closest.x, ai.snake[0].y - closest.y);
+                    let d2 = Math.hypot(ai.snake[0].x - f.x, ai.snake[0].y - f.y);
+                    return d2 < d1 ? f : closest;
+                }, food[0]);
 
-                // Point towards the food
-                ai.angle = Math.atan2(closestFood.y - ai.snake[0].y, closestFood.x - ai.snake[0].x);
+                if (closestFood) {
+                    let angleToFood = Math.atan2(closestFood.y - ai.snake[0].y, closestFood.x - ai.snake[0].x);
+                    ai.angle += (angleToFood - ai.angle) * 0.1;
+                }
+
                 updatePlayer(ai);
             });
         }
@@ -95,26 +119,29 @@
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.save();
-            let offsetX = canvas.width / 2 - players[0].snake[0].x * 2;
-            let offsetY = canvas.height / 2 - players[0].snake[0].y * 2;
+            let offsetX = canvas.width / 2 - players[0].snake[0].x * zoom;
+            let offsetY = canvas.height / 2 - players[0].snake[0].y * zoom;
             ctx.translate(offsetX, offsetY);
-            ctx.scale(2, 2);
-            
+            ctx.scale(zoom, zoom);
+
             ctx.fillStyle = "#222";
             for (let x = 0; x < worldSize; x += 100) {
                 for (let y = 0; y < worldSize; y += 100) {
                     ctx.fillRect(x, y, 50, 50);
                 }
             }
+
             ctx.strokeStyle = "white";
-            ctx.lineWidth = 5 / 2;
+            ctx.lineWidth = 5 / zoom;
             ctx.strokeRect(0, 0, worldSize, worldSize);
+
             ctx.fillStyle = "red";
             food.forEach(f => {
                 ctx.beginPath();
                 ctx.arc(f.x, f.y, 5, 0, Math.PI * 2);
                 ctx.fill();
             });
+
             [...players, ...aiPlayers].forEach(player => {
                 ctx.fillStyle = player.color;
                 player.snake.forEach(segment => {
@@ -123,8 +150,10 @@
                     ctx.fill();
                 });
             });
+
             ctx.restore();
             drawMinimap();
+            updateLeaderboard();
         }
 
         function drawMinimap() {
@@ -133,6 +162,7 @@
             minimapCtx.fillRect(0, 0, minimap.width, minimap.height);
             minimapCtx.strokeStyle = "white";
             minimapCtx.strokeRect(0, 0, minimap.width, minimap.height);
+
             [...players, ...aiPlayers].forEach(player => {
                 minimapCtx.fillStyle = player.color;
                 let x = (player.snake[0].x / worldSize) * minimap.width;
@@ -141,6 +171,13 @@
                 minimapCtx.arc(x, y, 3, 0, Math.PI * 2);
                 minimapCtx.fill();
             });
+        }
+
+        function updateLeaderboard() {
+            let allPlayers = [...players, ...aiPlayers];
+            allPlayers.sort((a, b) => b.foodEaten - a.foodEaten);
+            leaderboardDiv.innerHTML = "<strong>Leaderboard</strong><br>" + 
+                allPlayers.map(p => `${p.name}: ${p.foodEaten}`).join("<br>");
         }
 
         function gameLoop() {
