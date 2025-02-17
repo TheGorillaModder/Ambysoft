@@ -7,6 +7,24 @@
     <style>
         body { margin: 0; overflow: hidden; background: black; }
         canvas { display: block; }
+        #menu {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 20px;
+            margin: 10px;
+            cursor: pointer;
+        }
         #minimap {
             position: absolute;
             bottom: 10px;
@@ -30,16 +48,25 @@
     </style>
 </head>
 <body>
+    <div id="menu">
+        <h1>Slither.io Remake</h1>
+        <label for="colorPicker">Select Color:</label>
+        <input type="color" id="colorPicker" value="#ff0000">
+        <button onclick="startGame()">Play</button>
+    </div>
+
     <canvas id="gameCanvas"></canvas>
     <canvas id="minimap"></canvas>
     <div id="leaderboard">Leaderboard</div>
-    
+
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
         const minimap = document.getElementById("minimap");
         const minimapCtx = minimap.getContext("2d");
         const leaderboardDiv = document.getElementById("leaderboard");
+        const menu = document.getElementById("menu");
+        const colorPicker = document.getElementById("colorPicker");
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -48,23 +75,24 @@
         const foodAmount = 200;
         let zoom = 2;
 
-        function randomColor() {
-            return `hsl(${Math.random() * 360}, 100%, 50%)`;
+        function generateRandomName() {
+            const names = ["Bob", "Jake", "Max", "Eli", "Milo", "Zane", "Nate", "Finn"];
+            return names[Math.floor(Math.random() * names.length)] + Math.floor(Math.random() * 100);
         }
 
-        function createPlayer(name, x, y) {
+        function createPlayer(name, x, y, color) {
             return {
                 name,
                 snake: Array.from({ length: 10 }, (_, i) => ({ x: x - i * 10, y })),
                 angle: Math.random() * Math.PI * 2,
                 speed: 2,
-                color: randomColor(),
+                color,
                 foodEaten: 0
             };
         }
 
-        let players = [createPlayer("Player", worldSize / 2, worldSize / 2)];
-        let aiPlayers = Array.from({ length: 15 }, (_, i) => createPlayer("AI " + (i + 1), Math.random() * worldSize, Math.random() * worldSize));
+        let player;
+        let aiPlayers = Array.from({ length: 15 }, () => createPlayer(generateRandomName(), Math.random() * worldSize, Math.random() * worldSize, `hsl(${Math.random() * 360}, 100%, 50%)`));
         let food = [];
 
         function spawnFood() {
@@ -75,9 +103,10 @@
         spawnFood();
 
         document.addEventListener("mousemove", (e) => {
+            if (!player) return;
             let dx = e.clientX - canvas.width / 2;
             let dy = e.clientY - canvas.height / 2;
-            players[0].angle = Math.atan2(dy, dx);
+            player.angle = Math.atan2(dy, dx);
         });
 
         function updatePlayer(player) {
@@ -120,8 +149,8 @@
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.save();
-            let offsetX = canvas.width / 2 - players[0].snake[0].x * zoom;
-            let offsetY = canvas.height / 2 - players[0].snake[0].y * zoom;
+            let offsetX = canvas.width / 2 - player.snake[0].x * zoom;
+            let offsetY = canvas.height / 2 - player.snake[0].y * zoom;
             ctx.translate(offsetX, offsetY);
             ctx.scale(zoom, zoom);
 
@@ -132,10 +161,6 @@
                 }
             }
 
-            ctx.strokeStyle = "white";
-            ctx.lineWidth = 5 / zoom;
-            ctx.strokeRect(0, 0, worldSize, worldSize);
-
             ctx.fillStyle = "red";
             food.forEach(f => {
                 ctx.beginPath();
@@ -143,9 +168,9 @@
                 ctx.fill();
             });
 
-            [...players, ...aiPlayers].forEach(player => {
-                ctx.fillStyle = player.color;
-                player.snake.forEach(segment => {
+            [...aiPlayers, player].forEach(p => {
+                ctx.fillStyle = p.color;
+                p.snake.forEach(segment => {
                     ctx.beginPath();
                     ctx.arc(segment.x, segment.y, 5, 0, Math.PI * 2);
                     ctx.fill();
@@ -161,13 +186,11 @@
             minimapCtx.clearRect(0, 0, minimap.width, minimap.height);
             minimapCtx.fillStyle = "black";
             minimapCtx.fillRect(0, 0, minimap.width, minimap.height);
-            minimapCtx.strokeStyle = "white";
-            minimapCtx.strokeRect(0, 0, minimap.width, minimap.height);
 
-            [...players, ...aiPlayers].forEach(player => {
-                minimapCtx.fillStyle = player.color;
-                let x = (player.snake[0].x / worldSize) * minimap.width;
-                let y = (player.snake[0].y / worldSize) * minimap.height;
+            [...aiPlayers, player].forEach(p => {
+                minimapCtx.fillStyle = p.color;
+                let x = (p.snake[0].x / worldSize) * minimap.width;
+                let y = (p.snake[0].y / worldSize) * minimap.height;
                 minimapCtx.beginPath();
                 minimapCtx.arc(x, y, 3, 0, Math.PI * 2);
                 minimapCtx.fill();
@@ -175,20 +198,24 @@
         }
 
         function updateLeaderboard() {
-            let allPlayers = [...players, ...aiPlayers];
+            let allPlayers = [...aiPlayers, player];
             allPlayers.sort((a, b) => b.foodEaten - a.foodEaten);
             leaderboardDiv.innerHTML = "<strong>Leaderboard</strong><br>" + 
                 allPlayers.map(p => `${p.name}: ${p.foodEaten}`).join("<br>");
         }
 
+        function startGame() {
+            player = createPlayer(generateRandomName(), worldSize / 2, worldSize / 2, colorPicker.value);
+            menu.style.display = "none";
+            requestAnimationFrame(gameLoop);
+        }
+
         function gameLoop() {
-            updatePlayer(players[0]);
+            updatePlayer(player);
             updateAI();
             draw();
             requestAnimationFrame(gameLoop);
         }
-
-        gameLoop();
     </script>
 </body>
 </html>
