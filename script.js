@@ -94,7 +94,7 @@ function changeGame(gameName) {
     let currentSourceText = "gamedistribution.com";
     switch (gameName) {
         case "Snake":
-            currentLink = "https://unblocked-games.org/games/snake-io/";
+            currentLink = "Games/Snake.io.html";
             currentSourceLink = "https://unblocked-games.org";
             currentSourceText = "unblocked-games.org";
             break;
