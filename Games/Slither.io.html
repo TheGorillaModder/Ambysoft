@@ -44,7 +44,8 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        const worldSize = 5000;
+        const worldSize = 2000;
+        const foodAmount = 200;
         let zoom = 2;
 
         function randomColor() {
@@ -67,7 +68,7 @@
         let food = [];
 
         function spawnFood() {
-            while (food.length < 100) {
+            while (food.length < foodAmount) {
                 food.push({ x: Math.random() * worldSize, y: Math.random() * worldSize });
             }
         }
