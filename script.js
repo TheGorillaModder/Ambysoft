@@ -99,44 +99,55 @@ function changeGame(gameName) {
             currentSourceText = "unblocked-games.org";
             break;
         case "ShortLife":
-            currentLink = "https://html5.gamedistribution.com/030eb2f7b22246b3bbffd69b918e2a11/?gd_sdk_referrer_url=https://gamedistribution.com/games/short-life/";
+            currentLink = "Games/ShortLife.html";
             break;
         case "DrunkMan3D":
             currentLink = "https://html5.gamedistribution.com/f5227a5977c84a1d819702f88688ed80/?gd_sdk_referrer_url=https://gamedistribution.com/games/drunk-man-3d/";
+            currentLink = "Games/DrunkMan3D.html";
             break;
         case "GetACoolGun":
             currentLink = "https://html5.gamedistribution.com/f9320b27ae2d450fba45cfbe99ddd27a/?gd_sdk_referrer_url=https://gamedistribution.com/games/get-a-cool-gun!/";
+            currentLink = "Games/GetACoolGun.html";
             break;
         case "GunRush":
             currentLink = "https://html5.gamedistribution.com/e0ee0fc8416845b992af13f0bc74375d/?gd_sdk_referrer_url=https://gamedistribution.com/games/gun-rush-1/";
+            currentLink = "Games/GunRush.html";
             break;
         case "SquidGameButBlockworld":
             currentLink = "https://html5.gamedistribution.com/cdef60f561614a7991fa5b0b3515ed85/?gd_sdk_referrer_url=https://gamedistribution.com/games/squid-escape-but-blockworld/";
+            currentLink = "Games/SquidGameButBlockworld.html";
             break;
         case "ColorRaceObby":
             currentLink = "https://html5.gamedistribution.com/7503d2eb0f044c0ba76a6360230c32bb/?gd_sdk_referrer_url=https://gamedistribution.com/games/color-race-obby/";
+            currentLink = "Games/ColorRaceObby.html";
             break;
         case "Qube2048":
             currentLink = "https://html5.gamedistribution.com/588cfae14b0748628b75e0fe3d86a1fb/?gd_sdk_referrer_url=https://gamedistribution.com/games/qube-2048/";
+            currentLink = "Games/Qube2048.html";
             break;
         case "GeometryStars":
             currentLink = "https://html5.gamedistribution.com/15e7309e294e4f78943d9e39fc0a0d85/?gd_sdk_referrer_url=https://gamedistribution.com/games/geometry-stars/";
+            currentLink = "Games/GeometryStars.html";
             break;
         case "NumberDomination":
             currentLink = "https://html5.gamedistribution.com/0a8abcb4fd9442e99827c02a72dd9f12/?gd_sdk_referrer_url=https://gamedistribution.com/games/number-domination/";
+            currentLink = "Games/NumberDomination.html";
             break;
         case "EvolutionOfTrust":
             currentLink = "https://ncase.me/trust/"
+            currentLink = "Games/EvolutionOfTrust.html";
             currentSourceLink = "https://ncase.me/"
             currentSourceText = "ncase.me"
             break;
         case "RunSausageRun":
             currentLink = "https://h5.4j.com/games/Run-Sausage-Run/index.html"
+            currentLink = "Games/RunSuasageRun.html";
             currentSourceLink = "https://www.4j.com/"
             currentSourceText = "4j.com"
             break;
         case "DrawBridges":
             currentLink = "https://games.crazygames.com/en_US/draw-bridges/index.html";
+            currentLink = "Games/DrawBridges.html";
             currentSourceLink = "https://crazygames.com";
             currentSourceText = "crazygames.com";
         default:
