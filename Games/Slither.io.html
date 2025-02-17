@@ -30,6 +30,7 @@
         canvas.height = window.innerHeight;
 
         const worldSize = 5000;
+
         function randomColor() {
             return `hsl(${Math.random() * 360}, 100%, 50%)`;
         }
@@ -78,7 +79,15 @@
 
         function updateAI() {
             aiPlayers.forEach(ai => {
-                ai.angle += (Math.random() - 0.5) * 0.1;
+                // Find the closest food
+                let closestFood = food.reduce((closest, current) => {
+                    let distanceToCurrent = Math.hypot(ai.snake[0].x - current.x, ai.snake[0].y - current.y);
+                    let distanceToClosest = Math.hypot(ai.snake[0].x - closest.x, ai.snake[0].y - closest.y);
+                    return distanceToCurrent < distanceToClosest ? current : closest;
+                });
+
+                // Point towards the food
+                ai.angle = Math.atan2(closestFood.y - ai.snake[0].y, closestFood.x - ai.snake[0].x);
                 updatePlayer(ai);
             });
         }
