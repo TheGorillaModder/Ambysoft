@@ -17,15 +17,16 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
+        const worldSize = 5000;
         let snake = [];
         for (let i = 0; i < 10; i++) {
-            snake.push({ x: canvas.width / 2 - i * 5, y: canvas.height / 2 });
+            snake.push({ x: worldSize / 2 - i * 10, y: worldSize / 2 });
         }
         
         let food = [];
         function spawnFood() {
             while (food.length < 100) {
-                food.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height });
+                food.push({ x: Math.random() * worldSize, y: Math.random() * worldSize });
             }
         }
         spawnFood();
@@ -34,13 +35,16 @@
         let speed = 2;
 
         document.addEventListener("mousemove", (e) => {
-            let dx = e.clientX - snake[0].x;
-            let dy = e.clientY - snake[0].y;
+            let dx = e.clientX - canvas.width / 2;
+            let dy = e.clientY - canvas.height / 2;
             angle = Math.atan2(dy, dx);
         });
 
         function update() {
             let head = { x: snake[0].x + Math.cos(angle) * speed, y: snake[0].y + Math.sin(angle) * speed };
+            
+            if (head.x < 0 || head.x > worldSize || head.y < 0 || head.y > worldSize) return;
+            
             snake.unshift(head);
             
             for (let i = 0; i < food.length; i++) {
@@ -56,18 +60,31 @@
 
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let offsetX = canvas.width / 2 - snake[0].x;
+            let offsetY = canvas.height / 2 - snake[0].y;
+
+            ctx.fillStyle = "#222";
+            for (let x = 0; x < worldSize; x += 100) {
+                for (let y = 0; y < worldSize; y += 100) {
+                    ctx.fillRect(x + offsetX, y + offsetY, 50, 50);
+                }
+            }
+            
+            ctx.strokeStyle = "white";
+            ctx.lineWidth = 5;
+            ctx.strokeRect(offsetX, offsetY, worldSize, worldSize);
             
             ctx.fillStyle = "red";
             food.forEach(f => {
                 ctx.beginPath();
-                ctx.arc(f.x, f.y, 5, 0, Math.PI * 2);
+                ctx.arc(f.x + offsetX, f.y + offsetY, 5, 0, Math.PI * 2);
                 ctx.fill();
             });
             
             ctx.fillStyle = "lime";
             snake.forEach(segment => {
                 ctx.beginPath();
-                ctx.arc(segment.x, segment.y, 5, 0, Math.PI * 2);
+                ctx.arc(segment.x + offsetX, segment.y + offsetY, 5, 0, Math.PI * 2);
                 ctx.fill();
             });
         }
