@@ -17,7 +17,7 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        const worldSize = 5000;
+        const worldSize = 2000;
         let snake = [];
         for (let i = 0; i < 10; i++) {
             snake.push({ x: worldSize / 2 - i * 10, y: worldSize / 2 });
@@ -32,7 +32,8 @@
         spawnFood();
         
         let angle = 0;
-        let speed = 2;
+        let speed = 5;
+        let zoom = 2;
 
         document.addEventListener("mousemove", (e) => {
             let dx = e.clientX - canvas.width / 2;
@@ -60,33 +61,39 @@
 
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            let offsetX = canvas.width / 2 - snake[0].x;
-            let offsetY = canvas.height / 2 - snake[0].y;
-
+            ctx.save();
+            
+            let offsetX = canvas.width / 2 - snake[0].x * zoom;
+            let offsetY = canvas.height / 2 - snake[0].y * zoom;
+            ctx.translate(offsetX, offsetY);
+            ctx.scale(zoom, zoom);
+            
             ctx.fillStyle = "#222";
             for (let x = 0; x < worldSize; x += 100) {
                 for (let y = 0; y < worldSize; y += 100) {
-                    ctx.fillRect(x + offsetX, y + offsetY, 50, 50);
+                    ctx.fillRect(x, y, 50, 50);
                 }
             }
             
             ctx.strokeStyle = "white";
-            ctx.lineWidth = 5;
-            ctx.strokeRect(offsetX, offsetY, worldSize, worldSize);
+            ctx.lineWidth = 5 / zoom;
+            ctx.strokeRect(0, 0, worldSize, worldSize);
             
             ctx.fillStyle = "red";
             food.forEach(f => {
                 ctx.beginPath();
-                ctx.arc(f.x + offsetX, f.y + offsetY, 5, 0, Math.PI * 2);
+                ctx.arc(f.x, f.y, 5, 0, Math.PI * 2);
                 ctx.fill();
             });
             
             ctx.fillStyle = "lime";
             snake.forEach(segment => {
                 ctx.beginPath();
-                ctx.arc(segment.x + offsetX, segment.y + offsetY, 5, 0, Math.PI * 2);
+                ctx.arc(segment.x, segment.y, 5, 0, Math.PI * 2);
                 ctx.fill();
             });
+            
+            ctx.restore();
         }
 
         function gameLoop() {
