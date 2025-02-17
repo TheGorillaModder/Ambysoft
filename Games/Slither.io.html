@@ -5,64 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Slither.io Remake</title>
     <style>
-        body { margin: 0; overflow: hidden; background: black; font-family: Arial, sans-serif; }
+        body { margin: 0; overflow: hidden; background: black; }
         canvas { display: block; }
-        #leaderboard {
+        #minimap {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 200px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
+            bottom: 10px;
+            left: 10px;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+        }
+        #menuScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+        .button {
+            background: white;
+            color: black;
+            padding: 15px 30px;
+            margin: 10px;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
+    <div id="menuScreen">
+        <button class="button" id="playButton">Play</button>
+        <button class="button" id="colorButton">Change Color</button>
+    </div>
     <canvas id="gameCanvas"></canvas>
-    <div id="leaderboard"></div>
-    
+    <canvas id="minimap"></canvas>
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
-        const leaderboard = document.getElementById("leaderboard");
+        const minimap = document.getElementById("minimap");
+        const minimapCtx = minimap.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-        let worldSize = 2000;
-        let foodAmount = 200;
+        const worldSize = 2000;
+        const foodAmount = 200;
+        let isGameRunning = false;
         let zoom = 2;
-        let gameStarted = false;
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener("resize", resizeCanvas);
-        resizeCanvas();
-
+        let playerColor = randomColor();
+        
         function randomColor() {
             return `hsl(${Math.random() * 360}, 100%, 50%)`;
         }
 
-        function generateRandomName() {
-            const names = ["Bob", "Max", "Sam", "Jake", "Liam", "Ethan", "Noah", "Mason", "Logan"];
-            return names[Math.floor(Math.random() * names.length)] + Math.floor(Math.random() * 100);
+        function randomName() {
+            const names = ["Bob", "Alice", "John", "Jane", "Steve", "Mary", "Tom", "Lucy"];
+            const num = Math.floor(Math.random() * 100);
+            return `${names[Math.floor(Math.random() * names.length)]}${num}`;
         }
 
-        function createPlayer(name, x, y, color, startScore) {
-            let initialSize = Math.floor(startScore / 2) + 10;
+        function createPlayer(x, y, color) {
             return {
-                name: name,
-                snake: Array.from({ length: initialSize }, (_, i) => ({ x: x - i * 10, y })),
+                snake: Array.from({ length: 10 }, (_, i) => ({ x: x - i * 10, y })),
                 angle: Math.random() * Math.PI * 2,
                 speed: 2,
                 color: color,
-                score: startScore
+                score: Math.floor(Math.random() * 91) + 10
             };
         }
 
-        let player = createPlayer(generateRandomName(), worldSize / 2, worldSize / 2, randomColor(), 10);
-        let aiPlayers = Array.from({ length: 15 }, () => createPlayer(generateRandomName(), Math.random() * worldSize, Math.random() * worldSize, randomColor(), Math.floor(Math.random() * 91) + 10));
+        let players = [createPlayer(worldSize / 2, worldSize / 2, playerColor)];
+        let aiPlayers = Array.from({ length: 15 }, () => createPlayer(Math.random() * worldSize, Math.random() * worldSize, randomColor()));
         let food = [];
 
         function spawnFood() {
@@ -72,37 +91,33 @@
         }
         spawnFood();
 
+        document.getElementById("playButton").addEventListener("click", () => {
+            isGameRunning = true;
+            document.getElementById("menuScreen").style.display = "none";
+        });
+
+        document.getElementById("colorButton").addEventListener("click", () => {
+            players[0].color = randomColor();
+        });
+
         document.addEventListener("mousemove", (e) => {
             let dx = e.clientX - canvas.width / 2;
             let dy = e.clientY - canvas.height / 2;
-            player.angle = Math.atan2(dy, dx);
+            players[0].angle = Math.atan2(dy, dx);
         });
-
-        function getNearestFood(x, y) {
-            let nearest = food.reduce((closest, f) => {
-                let dist = Math.hypot(f.x - x, f.y - y);
-                return dist < closest.dist ? { food: f, dist } : closest;
-            }, { food: null, dist: Infinity });
-            return nearest.food;
-        }
 
         function updatePlayer(player) {
             let head = { 
                 x: player.snake[0].x + Math.cos(player.angle) * player.speed, 
                 y: player.snake[0].y + Math.sin(player.angle) * player.speed 
             };
-            if (head.x < 0) head.x = worldSize;
-            if (head.x > worldSize) head.x = 0;
-            if (head.y < 0) head.y = worldSize;
-            if (head.y > worldSize) head.y = 0;
+            if (head.x < 0 || head.x > worldSize || head.y < 0 || head.y > worldSize) return;
             player.snake.unshift(head);
-
             for (let i = 0; i < food.length; i++) {
                 if (Math.hypot(head.x - food[i].x, head.y - food[i].y) < 10) {
                     food.splice(i, 1);
-                    player.score++;
-                    player.snake.push({ x: player.snake[player.snake.length - 1].x, y: player.snake[player.snake.length - 1].y });
                     spawnFood();
+                    player.score += 10;
                     return;
                 }
             }
@@ -111,12 +126,15 @@
 
         function updateAI() {
             aiPlayers.forEach(ai => {
-                let target = getNearestFood(ai.snake[0].x, ai.snake[0].y);
-                if (target) {
-                    let dx = target.x - ai.snake[0].x;
-                    let dy = target.y - ai.snake[0].y;
-                    ai.angle = Math.atan2(dy, dx);
-                }
+                // Smooth AI movement towards the food
+                let targetFood = food.reduce((closest, current) => {
+                    let distToCurrent = Math.hypot(current.x - ai.snake[0].x, current.y - ai.snake[0].y);
+                    let distToClosest = Math.hypot(closest.x - ai.snake[0].x, closest.y - ai.snake[0].y);
+                    return distToCurrent < distToClosest ? current : closest;
+                }, food[0]);
+
+                let angleToFood = Math.atan2(targetFood.y - ai.snake[0].y, targetFood.x - ai.snake[0].x);
+                ai.angle += (angleToFood - ai.angle) * 0.05; // Smooth turning
                 updatePlayer(ai);
             });
         }
@@ -124,8 +142,8 @@
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.save();
-            let offsetX = canvas.width / 2 - player.snake[0].x * zoom;
-            let offsetY = canvas.height / 2 - player.snake[0].y * zoom;
+            let offsetX = canvas.width / 2 - players[0].snake[0].x * zoom;
+            let offsetY = canvas.height / 2 - players[0].snake[0].y * zoom;
             ctx.translate(offsetX, offsetY);
             ctx.scale(zoom, zoom);
 
@@ -137,7 +155,7 @@
             }
 
             ctx.strokeStyle = "white";
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 5 / 2;
             ctx.strokeRect(0, 0, worldSize, worldSize);
 
             ctx.fillStyle = "red";
@@ -147,29 +165,58 @@
                 ctx.fill();
             });
 
-            [...aiPlayers, player].forEach(p => {
-                ctx.fillStyle = p.color;
-                p.snake.forEach(segment => {
+            [...players, ...aiPlayers].forEach(player => {
+                ctx.fillStyle = player.color;
+                player.snake.forEach(segment => {
                     ctx.beginPath();
                     ctx.arc(segment.x, segment.y, 5, 0, Math.PI * 2);
                     ctx.fill();
                 });
             });
-
             ctx.restore();
+
+            drawMinimap();
             drawLeaderboard();
         }
 
+        function drawMinimap() {
+            minimapCtx.clearRect(0, 0, minimap.width, minimap.height);
+            minimapCtx.fillStyle = "black";
+            minimapCtx.fillRect(0, 0, minimap.width, minimap.height);
+            minimapCtx.strokeStyle = "white";
+            minimapCtx.strokeRect(0, 0, minimap.width, minimap.height);
+            [...players, ...aiPlayers].forEach(player => {
+                minimapCtx.fillStyle = player.color;
+                let x = (player.snake[0].x / worldSize) * minimap.width;
+                let y = (player.snake[0].y / worldSize) * minimap.height;
+                minimapCtx.beginPath();
+                minimapCtx.arc(x, y, 3, 0, Math.PI * 2);
+                minimapCtx.fill();
+            });
+        }
+
         function drawLeaderboard() {
-            let playersList = [...aiPlayers, player].sort((a, b) => b.score - a.score);
-            leaderboard.innerHTML = playersList.map(p => `${p.name}: ${p.score}`).join("<br>");
+            let leaderboard = [...players, ...aiPlayers];
+            leaderboard.sort((a, b) => b.score - a.score);
+            ctx.save();
+            ctx.fillStyle = "white";
+            ctx.font = "20px Arial";
+            ctx.textAlign = "left";
+            ctx.fillText("Leaderboard", canvas.width - 160, 30);
+
+            leaderboard.forEach((player, index) => {
+                ctx.fillText(`${player.color} (${randomName()}) - ${player.score}`, canvas.width - 160, 50 + index * 30);
+            });
+            ctx.restore();
         }
 
         function gameLoop() {
-            updatePlayer(player);
-            updateAI();
-            draw();
-            requestAnimationFrame(gameLoop);
+            if (isGameRunning) {
+                updatePlayer(players[0]);
+                updateAI();
+                draw();
+                requestAnimationFrame(gameLoop);
+            }
         }
 
         gameLoop();
