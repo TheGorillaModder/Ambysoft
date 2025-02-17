@@ -94,11 +94,13 @@ function changeGame(gameName) {
     let currentSourceText = "gamedistribution.com";
     switch (gameName) {
         case "Snake":
+            currentLink = "https://unblocked-games.org/games/snake-io/";
             currentLink = "Games/Snake.io.html";
             currentSourceLink = "https://unblocked-games.org";
             currentSourceText = "unblocked-games.org";
             break;
         case "ShortLife":
+            currentLink = "https://html5.gamedistribution.com/030eb2f7b22246b3bbffd69b918e2a11/?gd_sdk_referrer_url=https://gamedistribution.com/games/short-life/";
             currentLink = "Games/ShortLife.html";
             break;
         case "DrunkMan3D":
