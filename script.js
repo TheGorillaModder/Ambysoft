@@ -180,6 +180,7 @@ function changePage(pageId) {
                 games, we strive to provide the best digital solutions on the internet. Elevate your workflow, 
                 enhance your gameplay, and explore the future of innovation all in one place.
             </div>
+            <img href="http://app.temu.com/m/mu2ag8hu0w1" src="">
             `;
             break;
         case 1:
