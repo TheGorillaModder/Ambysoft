@@ -179,8 +179,8 @@ function changePage(pageId) {
                 limits of creativity and entertainment. From powerful editing software to immersive, high-quality 
                 games, we strive to provide the best digital solutions on the internet. Elevate your workflow, 
                 enhance your gameplay, and explore the future of innovation all in one place.
+                <img style="height: 100px; width: 100px;" href="http://app.temu.com/m/mu2ag8hu0w1" alt="HELLOW SKIBIDI TOILETS" src="">
             </div>
-            <img style="height: 100px; width: 100px;" href="http://app.temu.com/m/mu2ag8hu0w1" alt="HELLOW SKIBIDI TOILETS" src="">
             `;
             break;
         case 1:
